@@ -13,9 +13,10 @@ import EXIF
 import os
 from shutil import copyfile
 
-rootdir = '/media/devendra/FreeAgent Drive/Hard-Disk-Recovery/New folder'
+rootdir = '/media/devendra/FreeAgent Drive'
 targetDir = '/home/devendra/photos-datewise'
 unknowDateFolder = 'unknownDate'
+removeOriginal = False
 
 def rearrangeImages(sourceDir, targetDir):
     count = 0
@@ -73,15 +74,18 @@ def rearrangeImages(sourceDir, targetDir):
                                 print "Changed target file to ", targetfile
                 if doCopy:
                     copyfile(filepath, targetfile)
+                
+                if removeOriginal:
+                    os.remove(filepath)
 
     print "Images with known dates: ", count,  "Unknown: ", countUnknown
 
 def getNewTargetFile(targetfile):
     index =  2
-    while os.path.isfile(targetfile + "-" + str(index)):
+    while os.path.isfile(targetfile[:-4] + "-" + str(index) + targetfile[-4:]):
         index = index + 1
 
-    return targetfile + "-" + str(index)
+    return targetfile[:-4] + "-" + str(index) + targetfile[-4:]
                 
 def extractYearMonth(datestr):
     # returns year, month from string
