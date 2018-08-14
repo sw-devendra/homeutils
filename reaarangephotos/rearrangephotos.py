@@ -1,7 +1,7 @@
 '''
 This script can be used to arrange your jpg files in Year/Month folder structures.
 Change following variables according to your env:
-rootdir : The directory which should be searched recursively to find jpg files
+sourceDir : The directory which should be searched recursively to find jpg files
 targetDir : The directory where new folder structure should be created
 unknowDateFolder : Optionally change the directory name to be created when a JPG has no date tag
 
@@ -12,7 +12,7 @@ import EXIF
 import os
 from shutil import copyfile
 
-rootdir = '/media/devendra/FreeAgent Drive'
+sourceDir = '/media/devendra/FreeAgent Drive'
 targetDir = '/home/devendra/photos-datewise'
 unknowDateFolder = 'unknownDate'
 removeOriginal = False
@@ -108,5 +108,5 @@ def extractYearMonth(datestr):
 
     
 
-rearrangeImages(rootdir, targetDir)
+rearrangeImages(sourceDir, targetDir)
 
