@@ -13,7 +13,7 @@ pip install exifread
 ```
 
 ## Usage
-* Edit reaarangephotos.py and update following variable according to your environment. __Will improve the script later to support command line arguments__ 
+* Edit reaarangephotos.py and update following variables according to your environment. __Will improve the script later to support command line arguments__ 
 ```
 sourceDir = 'path_to_source_directory' # JPG files will be searched recursively in this folder
 targetDir = 'path_to_target_directory' # Year/month folder structre will be created here
