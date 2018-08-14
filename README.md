@@ -1,4 +1,4 @@
 # homeutils
 
-I plan to add my future hacks to carry out different activities in my personal computers.
-The first python script, rearrangephotos.py has been added to sort jpg files in year/month folders
+In this project, I plan to add my future hacks to carry out different day to day activities
+

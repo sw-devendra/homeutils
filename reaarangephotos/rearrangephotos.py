@@ -7,7 +7,6 @@ unknowDateFolder : Optionally change the directory name to be created when a JPG
 
 Disclaimers: The script has not been tested extensively. However it worked perfectly in my environment.
 Error handling is almost negligible. It is assumed that the script has access to both source and target folders.
-Also it is assumed that
 '''
 import EXIF
 import os
