@@ -1,23 +1,14 @@
 '''
 This script can be used to arrange your jpg files in Year/Month folder structures.
-Change following variables according to your env:
-sourceDir : The directory which should be searched recursively to find jpg files
-targetDir : The directory where new folder structure should be created
-unknowDateFolder : Optionally change the directory name to be created when a JPG has no date tag
-
 Disclaimers: The script has not been tested extensively. However it worked perfectly in my environment.
 Error handling is almost negligible. It is assumed that the script has access to both source and target folders.
 '''
 import EXIF
 import os
 from shutil import copyfile
+import argparse
 
-sourceDir = '/media/devendra/FreeAgent Drive'
-targetDir = '/home/devendra/photos-datewise'
-unknowDateFolder = 'unknownDate'
-removeOriginal = False
-
-def rearrangeImages(sourceDir, targetDir):
+def rearrangeImages(sourceDir, targetDir, unknowDateFolder, removeOriginal):
     count = 0
     countUnknown  = 0
     for subdir, dirs, files in os.walk(sourceDir):
@@ -74,7 +65,9 @@ def rearrangeImages(sourceDir, targetDir):
                 if doCopy:
                     copyfile(filepath, targetfile)
                 
-                if removeOriginal:
+                if removeOriginal \
+                   and os.path.isfile(targetfile) \
+                   and os.path.getsize(filepath) == os.path.getsize(targetfile):
                     os.remove(filepath)
 
     print "Images with known dates: ", count,  "Unknown: ", countUnknown
@@ -106,7 +99,25 @@ def extractYearMonth(datestr):
 
     return (y, parts[1])
 
-    
+if __name__ == '__main__':
 
-rearrangeImages(sourceDir, targetDir)
+    parser = argparse.ArgumentParser(description='Rearrange pictures in year/month folder structure')
+    parser.add_argument('source_folder', help='Source folder path. Images will be searched recursively under this folder.')
+    parser.add_argument('target_folder', help='Target folder path. Year/month folder structure will be created under this folder')
+    parser.add_argument('--unknown_date_folder', '-u', nargs='?', default='unknownDate', help='Folder name in which images with unknown dates should be stored. Default name is unknowDate')
+    parser.add_argument('--remove_original',action='store_true', help='The original images are removed if this flag is used. WARNING: It is recommended not to use this flag if you cannot afford losing your photos. Though a file is copied to target folder before it is removed, there is no gaurantee that copying went perfectly. \nIf you really want to remove original files, the safer way could be to run this script two times. First without using this option and ensuring if the files were really copied well. After that run the script with this flag.')
+
+    args = parser.parse_args()
+
+    # check overlapping of folders
+    sourceParent = os.path.dirname(args.source_folder)
+    targetParent = os.path.dirname(args.target_folder)
+
+    if args.source_folder == args.target_folder \
+       or (sourceParent != targetParent and targetParent.startswith(args.source_folder)):
+        print "Error: Target folder cannot be same as source folder or a subfolder of source folder!"
+        quit()
+
+    rearrangeImages(args.source_folder, args.target_folder, args.unknown_date_folder, args.remove_original)
+
 
